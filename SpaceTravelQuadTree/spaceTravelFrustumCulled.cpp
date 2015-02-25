@@ -542,54 +542,100 @@ void drawScene(void)
 
 }
 
-void keyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
+float tempxVal, tempzVal, tempAngle;
+float speed, angSpeed;
+void update()
 {
-	float tempxVal = xVal, tempzVal = zVal, tempAngle = angle;
-	switch (key) {
-      case GLFW_KEY_ESCAPE:
-		exit(0);
-		break;
-	  case GLFW_KEY_SPACE:
-		// only want this to get called once and so call when key
-		// is released
-		if (action == GLFW_RELEASE) {
-			  isFrustumCulled = 1 - isFrustumCulled;
-		}
-		break;
-	  case GLFW_KEY_LEFT: 
-		tempAngle = angle + 5.0;
-		break;
-	  case GLFW_KEY_RIGHT: 
-		tempAngle = angle - 5.0;
-		break;
-	  case GLFW_KEY_UP:
-		tempxVal = xVal - sin(angle * PI / 180.0);
-		tempzVal = zVal - cos(angle * PI / 180.0);
-		break;
-	  case GLFW_KEY_DOWN:
-		tempxVal = xVal + sin(angle * PI / 180.0);
-		tempzVal = zVal + cos(angle * PI / 180.0);
-		break;
-	  default:
-		break;
-   }
+	tempAngle = angle + angSpeed * 2.0;
 
-  // Angle correction.
-  if (tempAngle > 360.0) tempAngle -= 360.0;
-  if (tempAngle < 0.0) tempAngle += 360.0;
+	// Angle correction.
+	if (tempAngle > 360.0) tempAngle -= 360.0;
+	if (tempAngle < 0.0) tempAngle += 360.0;
 
-  // Move spacecraft to next position only if there will not be collision with an asteroid.
-  if (!asteroidCraftCollision(tempxVal, tempzVal, tempAngle))
-  {
-	  isCollision = 0;
-	  xVal = tempxVal;
-	  zVal = tempzVal;
-	  angle = tempAngle;
-  }
-  else isCollision = 1;
-
+	tempxVal = xVal + speed * sin(tempAngle * PI / 180.0);
+	tempzVal = zVal + speed * cos(tempAngle * PI / 180.0);
+	
+	// Move spacecraft to next position only if there will not be collision with an asteroid.
+	if (!asteroidCraftCollision(tempxVal, tempzVal, tempAngle))
+	{
+		isCollision = 0;
+		xVal = tempxVal;
+		zVal = tempzVal;
+		angle = tempAngle;
+	}
+	else
+	{
+		tempxVal = xVal;
+		tempzVal = zVal;
+		tempAngle = angle;
+		isCollision = 1;
+	}
 }
 
+
+void keyPress(int key)
+{
+	//float tempxVal = xVal, tempzVal = zVal, tempAngle = angle;
+	switch (key) {
+	case GLFW_KEY_LEFT:
+		angSpeed += 1;
+		break;
+	case GLFW_KEY_RIGHT:
+		angSpeed -= 1;
+		break;
+	case GLFW_KEY_UP:
+		speed -= 1;
+		break;
+	case GLFW_KEY_DOWN:
+		speed += 1;
+		break;
+	default:
+		break;
+	}
+}
+
+void keyRelease(int key)
+{
+	switch (key) {
+	case GLFW_KEY_ESCAPE:
+		exit(0);
+		break;
+	case GLFW_KEY_SPACE:
+		isFrustumCulled = 1 - isFrustumCulled;
+		break;
+	case GLFW_KEY_LEFT:
+		angSpeed -= 1;
+		break;
+	case GLFW_KEY_RIGHT:
+		angSpeed += 1;
+		break;
+	case GLFW_KEY_UP:
+		speed += 1;
+		break;
+	case GLFW_KEY_DOWN:
+		speed -= 1;
+		break;
+	default:
+		break;
+	}
+}
+
+
+void keyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	switch (action)
+	{
+	case GLFW_PRESS:
+		keyPress(key);
+		break;
+	case GLFW_RELEASE:
+		keyRelease(key);
+		break;
+	default:
+		break;
+	}
+
+}
 // Routine to output interaction instructions to the C++ window.
 void printInteraction(void)
 {
@@ -639,6 +685,8 @@ int main(int argc, char **argv)
 	// run!
 	while (!glfwWindowShouldClose(window))
 	{
+		update();
+
 		drawScene();
 		glfwSwapBuffers(window);
 
