@@ -51,7 +51,7 @@ void Asteroid::draw()
 	  glPolygonMode(GL_BACK, GL_LINE);
 
 	  // create the sphere and place it in a global array
-	  CreateSphere(SPHERE_SIZE, 0, 0, 0, index);
+	  //CreateSphere(SPHERE_SIZE, 0, 0, 0, index);
 
 	  // draw sphere
 	  glDrawArrays(GL_TRIANGLE_FAN, index, SPHERE_VERTEX_COUNT);
