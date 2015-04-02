@@ -64,12 +64,16 @@
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="InitShader.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="intersectionDetectionRoutines.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="spaceTravelFrustumCulled.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="intersectionDetectionRoutines.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
