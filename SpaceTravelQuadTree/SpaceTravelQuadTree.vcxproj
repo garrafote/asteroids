@@ -90,7 +90,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)GL\x86\bin" "$(SolutionDir)$(Configuration)" /y</Command>
+      <Command>xcopy "$(SolutionDir)GL\x86\bin" "$(SolutionDir)$(Configuration)" /y
+xcopy "$(SolutionDir)shaders" "$(SolutionDir)$(Configuration)" /y</Command>
     </PostBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>..\GL\x86\include;..\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
